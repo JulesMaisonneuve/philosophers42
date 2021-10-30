@@ -49,24 +49,24 @@ int	eating(t_philosopher *philosopher, pthread_mutex_t **forks, t_parameters *pa
 	{
 		return (-1);
 	}
-	printf("-%lld- [%d] has taken his own fork\n", (current_timestamp() - parameters->start_time), philosopher->nb);
+	printf("-%lld- [%d] has taken his own fork\n", (current_timestamp() - parameters->start_time), philosopher->nb + 1);
 	if (pthread_mutex_lock(next_fork) != 0)
 	{
 		return (-1);
 	}
-	printf("-%lld- [%d] has taken the next fork\n", (current_timestamp() - parameters->start_time), philosopher->nb);
-	printf("-%lld- [%d] is eating\n", (current_timestamp() - parameters->start_time), philosopher->nb);
+	printf("-%lld- [%d] has taken the next fork\n", (current_timestamp() - parameters->start_time), philosopher->nb + 1);
+	printf("-%lld- [%d] is eating\n", (current_timestamp() - parameters->start_time), philosopher->nb + 1);
 	usleep(parameters->time_to_eat * 1000);
 	if (pthread_mutex_unlock(own_fork) != 0)
 	{
 		return (-1);
 	}
-	printf("-%lld- [%d] has UNLOCKED his own fork\n", (current_timestamp() - parameters->start_time), philosopher->nb);
+	printf("-%lld- [%d] has UNLOCKED his own fork\n", (current_timestamp() - parameters->start_time), philosopher->nb + 1);
 	if (pthread_mutex_unlock(next_fork) != 0)
 	{
 		return (-1);
 	}
-	printf("-%lld- [%d] has UNLOCKED the next fork\n", (current_timestamp() - parameters->start_time), philosopher->nb);
+	printf("-%lld- [%d] has UNLOCKED the next fork\n", (current_timestamp() - parameters->start_time), philosopher->nb + 1);
 	philosopher->last_meal = current_timestamp();
 	philosopher->nb_meals++;
 	return (0);
@@ -75,13 +75,13 @@ int	eating(t_philosopher *philosopher, pthread_mutex_t **forks, t_parameters *pa
 void	thinking(t_philosopher *philosopher, t_parameters *parameters)
 {
 	
-	printf("-%lld- [%d] is thinking\n", (current_timestamp() - parameters->start_time), philosopher->nb);
+	printf("-%lld- [%d] is thinking\n", (current_timestamp() - parameters->start_time), philosopher->nb + 1);
 }
 
 void	sleeping(t_philosopher *philosopher, t_parameters *parameters)
 {
 	philosopher->sleeping = 1;
-	printf("-%lld- [%d] is sleeping\n", (current_timestamp() - parameters->start_time), philosopher->nb);
+	printf("-%lld- [%d] is sleeping\n", (current_timestamp() - parameters->start_time), philosopher->nb + 1);
 	usleep(parameters->time_to_sleep * 1000);
 }
 
@@ -130,7 +130,7 @@ void	init_philosopher(t_philosopher *philosopher)
 	philosopher->sleeping = 0;
 	philosopher->nb = 0;
 	philosopher->dead = false;
-	philosopher->last_meal = 0;
+	philosopher->last_meal = current_timestamp();
 	philosopher->nb_meals = 0;
 }
 
@@ -163,23 +163,28 @@ int	check_meals(t_philosopher **philosophers, t_parameters *parameters)
 	return (1);
 }
 
+bool	is_starved_to_death(t_philosopher *philosopher, t_parameters *parameters)
+{
+	long long actual_time;
+
+	actual_time = current_timestamp();
+	// printf("diff: %lld  timetodie : %d  last_meal: %lld\n", (actual_time - philosopher->last_meal), parameters->time_to_die, philosopher->last_meal);
+	if ((actual_time - philosopher->last_meal) > parameters->time_to_die)
+	{
+		philosopher->dead = true;
+		printf("-%lld- [%d] died\n", (current_timestamp() - parameters->start_time), philosopher->nb + 1);
+		return (true);
+	}
+	return (false);
+}
+
 void	*thread_main(void *ptr)
 {
-	printf("un thread vient d'être lancé\n");
 	t_threadinfo *infos;
 
 	infos = (t_threadinfo *) ptr;
-	long long actual_time;
 	while (!is_someone_dead(infos->philosophers, infos->parameters->nb_philosophers))
 	{
-		actual_time = current_timestamp();
-		if ((actual_time - infos->philosophers[infos->nb_philo]->last_meal) > infos->parameters->time_to_die && infos->philosophers[infos->nb_philo]->last_meal != 0)
-		{
-			infos->philosophers[infos->nb_philo]->dead = true;
-			printf("-%lld- [%d] died\n", (current_timestamp() - infos->parameters->start_time), infos->nb_philo + 1);
-			break ;
-		}
-
 		eating(infos->philosophers[infos->nb_philo], infos->forks, infos->parameters);
 		if (infos->parameters->nb_meals > 0)
 		{
@@ -195,6 +200,25 @@ void	*thread_main(void *ptr)
 	return (ptr);
 }
 
+void	*check_death(void *ptr)
+{
+	t_threadinfo	*infos;
+	int i;
+
+	infos = (t_threadinfo *) ptr;
+	while (1)
+	{
+		i = 0;
+		while (i < infos->parameters->nb_philosophers)
+		{
+			if (is_starved_to_death(infos->philosophers[i], infos->parameters))
+				return (ptr);
+			i++;
+		}
+	}
+	return (ptr);
+}
+
 int main(int argc, char **argv)
 {
 	t_threadinfo *infos;
@@ -206,6 +230,7 @@ int main(int argc, char **argv)
 	t_philosopher	*philosophers[parameters->nb_philosophers];
 	pthread_mutex_t *forks[parameters->nb_philosophers];
 	pthread_t	threads[parameters->nb_philosophers];
+	pthread_t	monitor;
 
 	if (argc > 8)
 		return (-1);
@@ -217,7 +242,7 @@ int main(int argc, char **argv)
 		if (philosophers[i] == NULL)
 			return (-1);
 		init_philosopher(philosophers[i]);
-		philosophers[i]->nb = i + 1;
+		philosophers[i]->nb = i;
 		i++;
 
 	}
@@ -230,6 +255,11 @@ int main(int argc, char **argv)
 		pthread_mutex_init(forks[i], NULL);
 		i++;
 	}
+	infos = malloc(sizeof(t_threadinfo));
+	infos->parameters = parameters;
+	infos->philosophers = philosophers;
+	infos->forks = forks;
+	pthread_create(&monitor, NULL, *check_death, (void *) infos);
 	i = 0;
 	while (i < parameters->nb_philosophers)
 	{
@@ -239,16 +269,11 @@ int main(int argc, char **argv)
 		infos->forks = forks;
 		infos->nb_philo = i;
 		pthread_create(&threads[i], NULL, *thread_main, (void *) infos);
-		usleep(200000);
+
 		i++;
 	}
-	i = 0;
-	while (i < parameters->nb_philosophers)
-	{
-		pthread_join(threads[i], NULL);
-		i++;
-	}
-	// while (!is_someone_dead(philosophers, infos->parameters->nb_philosophers));
+	pthread_join(monitor, NULL);
 	free_all(philosophers, forks, parameters);
+	free(infos);
 	return (0);
 }
