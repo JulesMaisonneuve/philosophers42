@@ -1,7 +1,10 @@
 NAME = philo
 
-SRCS = main.c \
-		ft_atoi.c
+SRCS = init.c \
+		ft_atoi.c \
+		state_check.c \
+		states.c \
+		main.c
 
 OBJS = $(addprefix ,$(SRCS:.c=.o))
 
