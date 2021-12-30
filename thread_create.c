@@ -23,20 +23,20 @@ void	*thread_main(void *ptr)
 
 	infos = (t_threadinfo *) ptr;
 	while (!is_someone_dead(infos->philosophers,
-			infos->parameters->nb_philosophers) && check_meals(infos->philosophers, infos->parameters) != -1)
+			infos->parameters->nb_philosophers))
 	{
 		eating(infos->philosophers[infos->nb_philo],
 			infos->forks, infos->parameters);
 		if (infos->parameters->nb_meals > 0)
 		{
-			printf("KEK");
-			if (check_meals(infos->philosophers, infos->parameters) == -1)
-			{
-				printf("UN PHILOSOPHE A GRAILLE UN MAX");
-				infos->max_meals = 1;
-				// free_all(infos->philosophers, infos->forks, infos->parameters);
-				return (ptr);
-			}
+			// printf("KEK");
+			// if (check_meals(infos->philosophers, infos->parameters) == -1)
+			// {
+			// 	printf("UN PHILOSOPHE A GRAILLE UN MAX");
+			// 	infos->max_meals = 1;
+			// 	// free_all(infos->philosophers, infos->forks, infos->parameters);
+			// 	return (ptr);
+			// }
 		}
 		sleeping(infos->philosophers[infos->nb_philo], infos->parameters);
 		thinking(infos->philosophers[infos->nb_philo], infos->parameters);
@@ -49,15 +49,10 @@ int	thread_main_create(t_threadinfo	*infos, t_parameters *params, t_philosopher 
     int i;
     pthread_t monitor = 0;
 
-    pthread_create(&monitor, NULL, *check_death, (void *) infos);
+    pthread_create(&monitor, NULL, *check_death_meals, (void *) infos);
 	i = 0;
 	while (i < params->nb_philosophers)
 	{
-		if (infos->max_meals == 1)
-		{
-			printf("tTETSTTSTSTST\n");
-			return (-1);
-		}
 		infos = malloc(sizeof(t_threadinfo));
 		infos->parameters = params;
 		infos->philosophers = philos;

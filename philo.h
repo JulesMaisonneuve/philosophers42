@@ -45,7 +45,7 @@ void	    sleeping(t_philosopher *philosopher, t_parameters *parameters);
 void	    init_parameters(t_parameters *parameters);
 void	    init_philosopher(t_philosopher *philosopher);
 void	    set_parameters(t_parameters *parameters, int argc, char **argv);
-void	    *check_death(void *ptr);
+void	    *check_death_meals(void *ptr);
 bool	    is_starved_to_death(t_philosopher *philo, t_parameters *params);
 int	        check_meals(t_philosopher **philosophers, t_parameters *parameters);
 bool	    is_someone_dead(t_philosopher **philosophers, int nb_philosophers);
