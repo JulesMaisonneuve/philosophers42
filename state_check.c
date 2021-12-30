@@ -21,11 +21,11 @@ int	check_meals(t_philosopher **philosophers, t_parameters *parameters)
 	i = 0;
 	while (i < parameters->nb_philosophers)
 	{
-		if (philosophers[i]->nb_meals != parameters->nb_meals)
-			return (0);
+		if (philosophers[i]->nb_meals == parameters->nb_meals)
+			return (-1);
 		i++;
 	}
-	return (1);
+	return (0);
 }
 
 bool	is_starved_to_death(t_philosopher *philo, t_parameters *params)

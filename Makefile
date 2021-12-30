@@ -4,6 +4,8 @@ SRCS = init.c \
 		ft_atoi.c \
 		state_check.c \
 		states.c \
+		thread_create.c \
+		utils.c \
 		main.c
 
 OBJS = $(addprefix ,$(SRCS:.c=.o))
