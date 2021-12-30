@@ -56,7 +56,6 @@ void	*check_death_meals(void *ptr)
 		{
 			if (is_starved_to_death(infos->philosophers[i], infos->parameters))
 				return (ptr);
-			// printf("Philo %d, nb meals : %d\n", i, infos->philosophers[i]->nb_meals);
 			else if (infos->philosophers[i]->nb_meals == infos->parameters->nb_meals)
 			{
 				printf("-%lld- [%d] ate %d time(s)\n",
@@ -68,11 +67,3 @@ void	*check_death_meals(void *ptr)
 	}
 	return (ptr);
 }
-
-// void	*check_meals(void *ptr)
-// {
-// 	t_threadinfo	*infos;
-// 	int				i;
-
-// 	infos = (t)
-// }

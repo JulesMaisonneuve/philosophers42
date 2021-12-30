@@ -6,7 +6,7 @@ void	init_parameters(t_parameters *parameters)
 	parameters->time_to_die = 0;
 	parameters->time_to_sleep = 0;
 	parameters->time_to_eat = 0;
-	parameters->nb_meals = 0;
+	parameters->nb_meals = -1;
 	parameters->start_time = 0;
 }
 

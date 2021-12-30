@@ -13,8 +13,6 @@ void	free_all(t_philosopher **philos,
 		i++;
 	}
 	free(params);
-    // free(forks);
-    // free(philos);
 }
 
 void	*thread_main(void *ptr)
@@ -27,17 +25,6 @@ void	*thread_main(void *ptr)
 	{
 		eating(infos->philosophers[infos->nb_philo],
 			infos->forks, infos->parameters);
-		if (infos->parameters->nb_meals > 0)
-		{
-			// printf("KEK");
-			// if (check_meals(infos->philosophers, infos->parameters) == -1)
-			// {
-			// 	printf("UN PHILOSOPHE A GRAILLE UN MAX");
-			// 	infos->max_meals = 1;
-			// 	// free_all(infos->philosophers, infos->forks, infos->parameters);
-			// 	return (ptr);
-			// }
-		}
 		sleeping(infos->philosophers[infos->nb_philo], infos->parameters);
 		thinking(infos->philosophers[infos->nb_philo], infos->parameters);
 	}
