@@ -7,6 +7,7 @@ int	main(int argc, char **argv)
 	t_philosopher	**philosophers;
 	pthread_mutex_t	**forks;
 	pthread_t		*threads;
+	int				i;
 
 	if ((argc != 5 && argc != 6) || check_arg(argv) == -1)
 		return (-1);
@@ -24,7 +25,14 @@ int	main(int argc, char **argv)
 	infos->philosophers = philosophers;
 	infos->forks = forks;
 	thread_main_create(infos, parameters, philosophers, forks, threads);
-	free_all(philosophers, forks, parameters);
+	i = 0;
+	while (i < infos->parameters->nb_philosophers)
+	{
+		pthread_detach(threads[i]);
+		i++;
+	}
+	free_all(parameters, infos);
 	free(infos);
+	free(threads);
 	return (0);
 }

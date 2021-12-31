@@ -1,18 +1,19 @@
 #include "philo.h"
 
-void	free_all(t_philosopher **philos,
-	pthread_mutex_t **forks, t_parameters *params)
+void	free_all(t_parameters *params, t_threadinfo *infos)
 {
 	int	i;
 
 	i = 0;
 	while (i < params->nb_philosophers)
 	{
-		free(forks[i]);
-		free(philos[i]);
+		free(infos->philosophers[i]);
+		free(infos->forks[i]);
 		i++;
 	}
-	free(params);
+	free(infos->parameters);
+	free(infos->forks);
+	free(infos->philosophers);
 }
 
 void	*thread_main(void *ptr)
