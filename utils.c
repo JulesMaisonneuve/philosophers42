@@ -82,12 +82,11 @@ int	is_valid_arg(char *arg)
 
 int	check_arg(char **argv)
 {
-	int	i;
+	int				i;
 	long long int	nb;
 
 	i = 1;
 	nb = 0;
-
 	while (argv[i])
 	{
 		nb = ft_atoll(argv[i]);

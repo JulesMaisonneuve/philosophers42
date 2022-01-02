@@ -68,10 +68,13 @@ void	*check_death_meals(void *ptr)
 		{
 			if (is_starved_to_death(infos->philosophers[i], infos->parameters))
 				return (ptr);
-			else if (infos->philosophers[i]->nb_meals == infos->parameters->nb_meals)
+			else if (infos->philosophers[i]->nb_meals
+				== infos->parameters->nb_meals)
 			{
 				printf("-%lld- [%d] ate %d time(s)\n",
-					(current_timestamp() - infos->parameters->start_time), infos->philosophers[i]->nb + 1, infos->parameters->nb_meals);
+					(current_timestamp() - infos->parameters->start_time),
+					infos->philosophers[i]->nb + 1,
+					infos->parameters->nb_meals);
 				return (ptr);
 			}
 			i++;
