@@ -1,19 +1,18 @@
 #include "philo.h"
 
-void	free_all(t_parameters *params, t_threadinfo *infos)
+void	free_all(t_parameters *params, t_threadinfo infos)
 {
 	int	i;
 
 	i = 0;
 	while (i < params->nb_philosophers)
 	{
-		free(infos->philosophers[i]);
-		free(infos->forks[i]);
+		free(infos.philosophers[i]);
+		free(infos.forks[i]);
 		i++;
 	}
-	free(infos->parameters);
-	free(infos->forks);
-	free(infos->philosophers);
+	free(infos.forks);
+	free(infos.philosophers);
 }
 
 void	*thread_main(void *ptr)
@@ -29,26 +28,35 @@ void	*thread_main(void *ptr)
 		sleeping(infos->philosophers[infos->nb_philo], infos->parameters);
 		thinking(infos->philosophers[infos->nb_philo], infos->parameters);
 	}
+	free(infos);
 	return (ptr);
 }
 
-int	thread_main_create(t_threadinfo	*infos, t_parameters *params, t_philosopher **philos, pthread_mutex_t **forks, pthread_t *threads)
+int	thread_main_create(t_threadinfo	infos, pthread_t *threads)
 {
     int i;
     pthread_t monitor = 0;
+	t_threadinfo *thread_info;
 
-    pthread_create(&monitor, NULL, *check_death_meals, (void *) infos);
+    pthread_create(&monitor, NULL, *check_death_meals, (void *) &infos);
 	i = 0;
-	while (i < params->nb_philosophers)
+	while (i < infos.parameters->nb_philosophers)
 	{
-		infos = malloc(sizeof(t_threadinfo));
-		infos->parameters = params;
-		infos->philosophers = philos;
-		infos->forks = forks;
-		infos->nb_philo = i;
-		pthread_create(&threads[i], NULL, *thread_main, (void *) infos);
+		thread_info = malloc(sizeof(t_threadinfo));
+		thread_info->nb_philo = i;
+		thread_info->forks = infos.forks;
+		thread_info->philosophers = infos.philosophers;
+		thread_info->parameters = infos.parameters;
+		pthread_create(&threads[i], NULL, *thread_main, (void *) thread_info);
+		usleep(500);
 		i++;
 	}
     pthread_join(monitor, NULL);
+	i = 0;
+	while (i < infos.parameters->nb_philosophers)
+	{
+		pthread_detach(threads[i]);
+		i++;
+	}
 	return (0);
 }

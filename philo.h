@@ -34,7 +34,6 @@ typedef struct s_threadinfo
 	pthread_mutex_t	**forks;
 	t_parameters	*parameters;
 	int				nb_philo;
-	int				max_meals;
 }				t_threadinfo;
 
 long long   current_timestamp(void);
@@ -51,8 +50,8 @@ int	        check_meals(t_philosopher **philosophers, t_parameters *parameters);
 bool	    is_someone_dead(t_philosopher **philosophers, int nb_philosophers);
 int			create_philos(t_parameters *parameters, pthread_mutex_t **forks, t_philosopher **philosophers);
 void		*thread_main(void *ptr);
-int   		thread_main_create(t_threadinfo	*infos, t_parameters *params, t_philosopher **philos, pthread_mutex_t **forks, pthread_t *threads);
-void		free_all(t_parameters *params, t_threadinfo *infos);
+int   		thread_main_create(t_threadinfo	infos, pthread_t *threads);
+void		free_all(t_parameters *params, t_threadinfo infos);
 int			check_arg(char **argv);
 
 #endif

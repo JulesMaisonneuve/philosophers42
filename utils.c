@@ -48,13 +48,12 @@ int	is_valid_arg(char *arg)
 {
 	while (*arg)
 	{
-		if ((*arg < '0' || *arg > '9') && (*arg != '-' && *arg != '+'))
+		if ((*arg < '0' || *arg > '9') && *arg != '+')
 		{
 			ft_putstr_fd("Error\n", 1);
 			return (-1);
 		}
-		else if ((*arg == '-' && *(arg + 1) == '-')
-			|| (*arg == '+' && *(arg + 1) == '+'))
+		else if ((*arg == '+' && *(arg + 1) == '+'))
 		{
 			ft_putstr_fd("Error\n", 1);
 			return (-1);
