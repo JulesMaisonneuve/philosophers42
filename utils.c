@@ -6,7 +6,7 @@
 /*   By: jumaison <jumaison@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 01:11:30 by jumaison          #+#    #+#             */
-/*   Updated: 2022/01/03 16:07:59 by jumaison         ###   ########.fr       */
+/*   Updated: 2022/01/03 17:15:40 by jumaison         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,12 @@ int	check_arg(char **argv)
 
 	i = 1;
 	nb = 0;
-<<<<<<< HEAD
 	nb = ft_atoll(argv[1]);
 	if (nb == 0)
 	{
 		printf("Error: 0 philosophers\n");
 		return (-1);
 	}
-=======
->>>>>>> 786343c4bb78f0d6c0f7422056271d398b4827ef
 	while (argv[i])
 	{
 		nb = ft_atoll(argv[i]);
