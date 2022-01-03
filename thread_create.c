@@ -48,11 +48,11 @@ void	*thread_main(void *ptr)
 
 int	thread_main_create(t_threadinfo	infos, pthread_t *threads)
 {
-    int i;
-    pthread_t monitor = 0;
-	t_threadinfo *thread_info;
+	int				i;
+	pthread_t		monitor;
+	t_threadinfo	*thread_info;
 
-    pthread_create(&monitor, NULL, *check_death_meals, (void *) &infos);
+	pthread_create(&monitor, NULL, *check_death_meals, (void *) &infos);
 	i = 0;
 	while (i < infos.parameters->nb_philosophers)
 	{
@@ -65,7 +65,7 @@ int	thread_main_create(t_threadinfo	infos, pthread_t *threads)
 		usleep(100);
 		i++;
 	}
-    pthread_join(monitor, NULL);
+	pthread_join(monitor, NULL);
 	i = 0;
 	while (i < infos.parameters->nb_philosophers)
 	{

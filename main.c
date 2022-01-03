@@ -33,7 +33,6 @@ int	main(int argc, char **argv)
 	infos.philosophers = philosophers;
 	infos.forks = forks;
 	infos.parameters = &parameters;
-
 	thread_main_create(infos, threads);
 	free_all(&parameters, infos);
 	free(threads);

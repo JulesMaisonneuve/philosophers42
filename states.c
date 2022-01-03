@@ -26,7 +26,11 @@ int	eating(t_philosopher *philos, pthread_mutex_t **forks, t_parameters *params,
 {
 	pthread_mutex_t	*own_fork;
 	pthread_mutex_t	*next_fork;
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 786343c4bb78f0d6c0f7422056271d398b4827ef
 	own_fork = forks[philos->nb];
 	next_fork = forks[(philos->nb + 1) % params->nb_philosophers];
 	if (pthread_mutex_lock(own_fork) != 0)

@@ -72,17 +72,20 @@ int	is_valid_arg(char *arg)
 
 int	check_arg(char **argv)
 {
-	int	i;
+	int				i;
 	long long int	nb;
 
 	i = 1;
 	nb = 0;
+<<<<<<< HEAD
 	nb = ft_atoll(argv[1]);
 	if (nb == 0)
 	{
 		printf("Error: 0 philosophers\n");
 		return (-1);
 	}
+=======
+>>>>>>> 786343c4bb78f0d6c0f7422056271d398b4827ef
 	while (argv[i])
 	{
 		nb = ft_atoll(argv[i]);
