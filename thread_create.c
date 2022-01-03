@@ -6,7 +6,7 @@
 /*   By: jumaison <jumaison@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 01:11:14 by jumaison          #+#    #+#             */
-/*   Updated: 2022/01/02 01:11:19 by jumaison         ###   ########.fr       */
+/*   Updated: 2022/01/03 17:02:40 by jumaison         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,14 @@ void	*thread_main(void *ptr)
 
 	infos = (t_threadinfo *) ptr;
 	while (!is_someone_dead(infos->philosophers,
-			infos->parameters->nb_philosophers))
+			infos->parameters->nb_philosophers) && !check_meals(infos->philosophers, infos->parameters))
 	{
-		eating(infos->philosophers[infos->nb_philo],
-			infos->forks, infos->parameters);
-		sleeping(infos->philosophers[infos->nb_philo], infos->parameters);
-		thinking(infos->philosophers[infos->nb_philo], infos->parameters);
+		if (!is_someone_dead(infos->philosophers, infos->parameters->nb_philosophers) && !check_meals(infos->philosophers, infos->parameters))
+			eating(infos->philosophers[infos->nb_philo], infos->forks, infos->parameters, infos);
+		if (!is_someone_dead(infos->philosophers, infos->parameters->nb_philosophers) && !check_meals(infos->philosophers, infos->parameters))
+			sleeping(infos->philosophers[infos->nb_philo], infos->parameters);
+		if (!is_someone_dead(infos->philosophers, infos->parameters->nb_philosophers) && !check_meals(infos->philosophers, infos->parameters))
+			thinking(infos->philosophers[infos->nb_philo], infos->parameters);
 	}
 	free(infos);
 	return (ptr);
@@ -60,14 +62,14 @@ int	thread_main_create(t_threadinfo	infos, pthread_t *threads)
 		thread_info->philosophers = infos.philosophers;
 		thread_info->parameters = infos.parameters;
 		pthread_create(&threads[i], NULL, *thread_main, (void *) thread_info);
-		usleep(500);
+		usleep(100);
 		i++;
 	}
     pthread_join(monitor, NULL);
 	i = 0;
 	while (i < infos.parameters->nb_philosophers)
 	{
-		pthread_detach(threads[i]);
+		pthread_join(threads[i], NULL);
 		i++;
 	}
 	return (0);

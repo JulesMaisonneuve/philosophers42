@@ -6,7 +6,7 @@
 /*   By: jumaison <jumaison@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 01:11:42 by jumaison          #+#    #+#             */
-/*   Updated: 2022/01/02 01:11:43 by jumaison         ###   ########.fr       */
+/*   Updated: 2022/01/03 16:50:02 by jumaison         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@ bool	is_someone_dead(t_philosopher **philosophers, int nb_philosophers)
 	while (i < nb_philosophers)
 	{
 		if (philosophers[i]->dead)
+		{
 			return (true);
+		}
 		i++;
 	}
 	return (false);

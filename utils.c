@@ -6,7 +6,7 @@
 /*   By: jumaison <jumaison@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 01:11:30 by jumaison          #+#    #+#             */
-/*   Updated: 2022/01/02 01:11:31 by jumaison         ###   ########.fr       */
+/*   Updated: 2022/01/03 16:07:59 by jumaison         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,19 +60,9 @@ int	is_valid_arg(char *arg)
 {
 	while (*arg)
 	{
-		if ((*arg < '0' || *arg > '9') && *arg != '+')
+		if ((*arg < '0' || *arg > '9'))
 		{
-			ft_putstr_fd("Error\n", 1);
-			return (-1);
-		}
-		else if ((*arg == '+' && *(arg + 1) == '+'))
-		{
-			ft_putstr_fd("Error\n", 1);
-			return (-1);
-		}
-		else if ((*arg == '-' || *arg == '+') && *(arg + 1) == '\0')
-		{
-			ft_putstr_fd("Error\n", 1);
+			ft_putstr_fd("Error: Invalid args\n", 1);
 			return (-1);
 		}
 		arg++;
@@ -87,7 +77,12 @@ int	check_arg(char **argv)
 
 	i = 1;
 	nb = 0;
-
+	nb = ft_atoll(argv[1]);
+	if (nb == 0)
+	{
+		printf("Error: 0 philosophers\n");
+		return (-1);
+	}
 	while (argv[i])
 	{
 		nb = ft_atoll(argv[i]);

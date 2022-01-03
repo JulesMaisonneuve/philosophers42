@@ -6,7 +6,7 @@
 /*   By: jumaison <jumaison@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 01:11:27 by jumaison          #+#    #+#             */
-/*   Updated: 2022/01/02 01:11:28 by jumaison         ###   ########.fr       */
+/*   Updated: 2022/01/03 16:40:50 by jumaison         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ typedef struct s_threadinfo
 
 long long   current_timestamp(void);
 int         ft_atoi(const char *str);
-int         eating(t_philosopher *philos, pthread_mutex_t **forks, t_parameters *params);
+int         eating(t_philosopher *philos, pthread_mutex_t **forks, t_parameters *params, t_threadinfo *infos);
 void	    thinking(t_philosopher *philosopher, t_parameters *parameters);
 void	    sleeping(t_philosopher *philosopher, t_parameters *parameters);
 void	    init_parameters(t_parameters *parameters);
