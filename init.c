@@ -6,7 +6,7 @@
 /*   By: jumaison <jumaison@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 01:12:26 by jumaison          #+#    #+#             */
-/*   Updated: 2022/01/02 01:12:27 by jumaison         ###   ########.fr       */
+/*   Updated: 2022/01/20 22:05:28 by jumaison         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void	init_philosopher(t_philosopher *philosopher)
 	philosopher->dead = false;
 	philosopher->last_meal = current_timestamp();
 	philosopher->nb_meals = 0;
+	philosopher->struct_lock = malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_init(philosopher->struct_lock, NULL);
 }
 
 void	set_parameters(t_parameters *parameters, int argc, char **argv)

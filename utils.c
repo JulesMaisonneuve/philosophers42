@@ -6,7 +6,7 @@
 /*   By: jumaison <jumaison@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 01:11:30 by jumaison          #+#    #+#             */
-/*   Updated: 2022/01/03 17:15:40 by jumaison         ###   ########.fr       */
+/*   Updated: 2022/01/20 22:50:53 by jumaison         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,17 @@ int	check_arg(char **argv)
 			return (-1);
 		i++;
 	}
+	return (0);
+}
+
+int	alone_philo(t_parameters *params, t_philosopher *philos,
+	pthread_mutex_t *own_fork)
+{
+	usleep(params->time_to_die * 1000);
+	pthread_mutex_lock(philos->struct_lock);
+	philos->dead = true;
+	pthread_mutex_unlock(philos->struct_lock);
+	if (pthread_mutex_unlock(own_fork) != 0)
+		return (-1);
 	return (0);
 }

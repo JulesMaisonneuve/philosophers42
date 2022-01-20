@@ -6,7 +6,7 @@
 /*   By: jumaison <jumaison@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 01:11:39 by jumaison          #+#    #+#             */
-/*   Updated: 2022/01/03 17:15:57 by jumaison         ###   ########.fr       */
+/*   Updated: 2022/01/20 22:50:39 by jumaison         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,25 @@ long long	current_timestamp(void)
 	return (milliseconds);
 }	
 
-int	eating(t_philosopher *philos, pthread_mutex_t **forks, t_parameters *params, t_threadinfo *infos)
+void	eating_status(t_threadinfo *infos, t_parameters *params,
+			t_philosopher *philos)
+{
+	if (!is_someone_dead_fed(infos->philosophers, params->nb_philosophers,
+			params))
+	{
+		printf("-%lld- [%d] has taken the next fork\n",
+			(current_timestamp() - params->start_time), philos->nb + 1);
+		printf("-%lld- [%d] is eating\n",
+			(current_timestamp() - params->start_time), philos->nb + 1);
+	}
+	pthread_mutex_lock(philos->struct_lock);
+	philos->last_meal = current_timestamp();
+	pthread_mutex_unlock(philos->struct_lock);
+	usleep(params->time_to_eat * 1000);
+}
+
+int	eating(t_philosopher *philos, pthread_mutex_t **forks, t_parameters *params,
+			t_threadinfo *infos)
 {
 	pthread_mutex_t	*own_fork;
 	pthread_mutex_t	*next_fork;
@@ -52,8 +70,11 @@ int	eating(t_philosopher *philos, pthread_mutex_t **forks, t_parameters *params,
 	usleep(params->time_to_eat * 1000);
 	if (pthread_mutex_unlock(own_fork) != 0)
 		return (-1);
-	if (pthread_mutex_unlock(next_fork) != 0)
-		return (-1);
+	if (params->nb_philosophers != 1)
+	{
+		if (pthread_mutex_unlock(next_fork) != 0)
+			return (-1);
+	}
 	philos->nb_meals++;
 	return (0);
 }

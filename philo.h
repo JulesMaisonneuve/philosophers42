@@ -6,7 +6,7 @@
 /*   By: jumaison <jumaison@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 01:11:27 by jumaison          #+#    #+#             */
-/*   Updated: 2022/01/03 17:15:02 by jumaison         ###   ########.fr       */
+/*   Updated: 2022/01/20 22:49:58 by jumaison         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_philosopher {
 	bool		dead;
 	long long	last_meal;
 	int			nb_meals;
+	pthread_mutex_t	*struct_lock;
 }				t_philosopher;
 
 typedef struct s_parameters
